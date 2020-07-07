@@ -7,6 +7,15 @@ This fork will **not** get any functional update. Just fix bugs all I can.
 
 Thanks to original author and all contributors!
 
+## News
+
+### Version 2.5.8 for php 7 released
+
+1. fix php 7 support(test on nginx php7.3-fpm).
+2. fix IE 10+ user agent string detecting.
+3. set download filename encoding to UTF-8.
+4. add zh-Hant translation.
+
 
 -----
 
