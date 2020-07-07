@@ -50,19 +50,24 @@ function _download_header($filename, $filesize = 0) {
 	header('Content-Type: '.(($browser=='IE' || $browser=='OPERA')?
 		'application/octetstream':'application/octet-stream'));
 	header('Expires: '.gmdate('D, d M Y H:i:s').' GMT');
-	header('Content-Transfer-Encoding: binary');
+    header('Content-Transfer-Encoding: binary');
     if ($filesize != 0)
     {
         header('Content-Length: '.$filesize);
     }
-    header('Content-Disposition: attachment; filename="'.$filename.'"');
+    // fix download filename encoding
+    $filename = rawurlencode($filename);
+
 	if($browser=='IE') {
-		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');
 	} else {
+        header("Content-Disposition: attachment; filename*=UTF-8''".$filename);
 		header('Cache-Control: no-cache, must-revalidate');
 		header('Pragma: no-cache');
-	}
+    }
+
 }
 
 function _download($file, $localname)
