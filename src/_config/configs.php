@@ -15,6 +15,8 @@ $GLOBALS["langs"] = array(
 	"cs" => array("cs","_img/smallicons/cs.png","Czech"),
 	"da" => array("da","_img/smallicons/da.png","Dansk"),
 	"sl" => array("sl","_img/smallicons/sl.png","Slovenscina"),
+	"zh-Hant" => array("zh-Hant","_img/smallicons/zh-Hant.png","繁中"),
+
 );
 
 $GLOBALS["baricons"] = array(

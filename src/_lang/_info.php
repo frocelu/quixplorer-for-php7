@@ -1,4 +1,5 @@
 <OPTION selected value="en">English</OPTION>
+<OPTION value="zh-Hant">繁體中文</OPTION>
 <OPTION value="de">Deutsch</OPTION>
 <OPTION value="es">Espa&ntilde;ol</OPTION>
 <OPTION value="fr">Fran&ccedil;ais</OPTION>
