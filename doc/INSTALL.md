@@ -15,7 +15,8 @@ This document guides you to the installation of quixplorer on your webserver.
 6. Set _home_url_ to the corresponding URL. (e.g. http://yoursite)
 7. If you want, enable uploadify as upload interface by adding this line to your conf.php:
 	$GLOBALS["use_uploadify"] = true;
-8. ** Change the admin password immediatly ** 9. Have Fun...
+8. ** Change the admin password immediatly ** 
+9. Have Fun...
 
 ### Troubleshooting
 

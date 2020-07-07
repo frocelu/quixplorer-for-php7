@@ -1,4 +1,14 @@
-# QuiXplorer 
+# QuiXplorer for php7
+This fork is just because I use quixplorer for my work.
+For secure reason, I must update quixplorer from php 5 to 7.
+
+This fork will **not** get any functional update. Just fix bugs all I can.
+Thanks to original author and all contributors!
+
+
+
+-----
+
 
 ## Web based file management
 
