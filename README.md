@@ -13,8 +13,9 @@ Thanks to original author and all contributors!
 
 1. fix php 7 support(test on nginx php7.3-fpm).
 2. fix IE 10+ user agent string detecting.
-3. set download filename encoding to UTF-8.
-4. add zh-Hant translation.
+3. fix OWASP [HttpOnly](https://owasp.org/index.php/HttpOnly) secure problem.
+4. set download filename encoding to UTF-8.
+5. add zh-Hant translation.
 
 
 -----
