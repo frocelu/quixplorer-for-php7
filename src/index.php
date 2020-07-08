@@ -36,6 +36,9 @@ Comment:
 	Have Fun...
 ------------------------------------------------------------------------------*/
 
+// fix OWASP HttpOnly
+ini_set("session.cookie_httponly", 1);
+
 umask(002); // Added to make created files/dirs group writable
 
 require_once "qx.php";
