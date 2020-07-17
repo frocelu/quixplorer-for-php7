@@ -16,6 +16,7 @@ Thanks to original author and all contributors!
 3. fix OWASP [HttpOnly](https://owasp.org/index.php/HttpOnly) secure problem.
 4. set download filename encoding to UTF-8.
 5. add zh-Hant translation.
+6. fix Unicode file name.
 
 
 -----
