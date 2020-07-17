@@ -152,65 +152,68 @@ function print_table ($dir, $list)
 			$target = "_blank";
 		}
 
-		echo "<TR class=\"rowdata\"><TD><INPUT TYPE=\"checkbox\" name=\"selitems[]\" value=\"";
-		echo htmlspecialchars($item)."\" onclick=\"javascript:Toggle(this);\"></TD>\n";
-	// Icon + Link
-		echo "<TD nowrap>";
-		if (permissions_grant($dir, $item, "read"))
-			echo"<A HREF=\"" . $link . "\">";
-		//else echo "<A>";
-		echo "<IMG border=\"0\" width=\"16\" height=\"16\" ";
-		echo "align=\"ABSMIDDLE\" src=\"_img/".get_mime_type($dir, $item, "img")."\" ALT=\"\">&nbsp;";
-		$s_item=$item;	if(mb_strlen($s_item)>50) $s_item=mb_substr($s_item,0,47)."...";
-		echo htmlspecialchars($s_item);
-		if (permissions_grant($dir, $item, "read"))
-			echo "</A>";
-		echo "</TD>\n";	// ...$extra...
-	// Size
-		echo '<TD>'.parse_file_size(get_file_size($dir,$item)) .sprintf("%10s","&nbsp;")."</TD>\n";
-	// Type
-		echo "<td>"._get_link_info($dir, $item, "type")."</td>\n";
-	// Modified
-		echo "<TD>".parse_file_date(get_file_date($dir,$item))."</TD>\n";
-	// Permissions
-		echo "<TD>";
-		if (permissions_grant($dir, NULL, "change"))
+        // hide not_show
+		if (!preg_match($GLOBALS["not_show"], $item))
 		{
-			echo "<A HREF=\"".make_link("chmod",$dir,$item)."\" TITLE=\"";
-			echo $GLOBALS["messages"]["permlink"]."\">";
-		}
-		echo parse_file_type($dir,$item).parse_file_perms(get_file_perms($dir,$item));
-		if (permissions_grant($dir, NULL, "change"))
-			echo "</A>";
-		echo "</TD>\n";
-	// Actions
-		echo "<TD>\n<TABLE>\n";
-		// EDIT
-		if(get_is_editable($dir, $item))
-		{
-			_print_link("edit", permissions_grant($dir, $item, "change"), $dir, $item);
-		} else {
-			// UNZIP
-			if(get_is_unzipable($dir, $item))
+
+			echo "<TR class=\"rowdata\"><TD><INPUT TYPE=\"checkbox\" name=\"selitems[]\" value=\"";
+			echo htmlspecialchars($item)."\" onclick=\"javascript:Toggle(this);\"></TD>\n";
+		// Icon + Link
+			echo "<TD nowrap>";
+			if (permissions_grant($dir, $item, "read"))
+				echo"<A HREF=\"" . $link . "\">";
+			//else echo "<A>";
+			echo "<IMG border=\"0\" width=\"16\" height=\"16\" ";
+			echo "align=\"ABSMIDDLE\" src=\"_img/".get_mime_type($dir, $item, "img")."\" ALT=\"\">&nbsp;";
+			$s_item=$item;	if(mb_strlen($s_item)>50) $s_item=mb_substr($s_item,0,47)."...";
+			echo htmlspecialchars($s_item);
+			if (permissions_grant($dir, $item, "read"))
+				echo "</A>";
+			echo "</TD>\n";	// ...$extra...
+		// Size
+			echo '<TD>'.parse_file_size(get_file_size($dir,$item)) .sprintf("%10s","&nbsp;")."</TD>\n";
+		// Type
+			echo "<td>"._get_link_info($dir, $item, "type")."</td>\n";
+		// Modified
+			echo "<TD>".parse_file_date(get_file_date($dir,$item))."</TD>\n";
+		// Permissions
+			echo "<TD>";
+			if (permissions_grant($dir, NULL, "change"))
 			{
-				_print_link("unzip", permissions_grant($dir, $item, "create"), $dir, $item);
-			}else{
+				echo "<A HREF=\"".make_link("chmod",$dir,$item)."\" TITLE=\"";
+				echo $GLOBALS["messages"]["permlink"]."\">";
+			}
+			echo parse_file_type($dir,$item).parse_file_perms(get_file_perms($dir,$item));
+			if (permissions_grant($dir, NULL, "change"))
+				echo "</A>";
+			echo "</TD>\n";
+		// Actions
+			echo "<TD>\n<TABLE>\n";
+			// EDIT
+			if(get_is_editable($dir, $item))
+			{
+				_print_link("edit", permissions_grant($dir, $item, "change"), $dir, $item);
+			} else {
+				// UNZIP
+				if(get_is_unzipable($dir, $item))
+				{
+					_print_link("unzip", permissions_grant($dir, $item, "create"), $dir, $item);
+				}else{
+					echo "<TD><IMG border=\"0\" width=\"16\" height=\"16\" align=\"ABSMIDDLE\" ";
+					echo "src=\"".$GLOBALS["baricons"]["none"]."\" ALT=\"\"></TD>\n";
+				}
+			}
+
+			// DOWNLOAD
+			if(get_is_file($dir,$item))
+			{
+				_print_link("download", permissions_grant($dir, $item, "read"), $dir, $item);
+			} else {
 				echo "<TD><IMG border=\"0\" width=\"16\" height=\"16\" align=\"ABSMIDDLE\" ";
 				echo "src=\"".$GLOBALS["baricons"]["none"]."\" ALT=\"\"></TD>\n";
 			}
+			echo "</TABLE>\n</TD></TR>\n";
 		}
-
-
-
-		// DOWNLOAD
-		if(get_is_file($dir,$item))
-		{
-			_print_link("download", permissions_grant($dir, $item, "read"), $dir, $item);
-		} else {
-			echo "<TD><IMG border=\"0\" width=\"16\" height=\"16\" align=\"ABSMIDDLE\" ";
-			echo "src=\"".$GLOBALS["baricons"]["none"]."\" ALT=\"\"></TD>\n";
-		}
-		echo "</TABLE>\n</TD></TR>\n";
 	}
 }
 

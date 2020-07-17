@@ -24,7 +24,7 @@
 	// Value 0x0003 means read / write access
 	$GLOBALS["global_permissions"] = 0x0001;
 
-	// language: (en, de, es, fr, nl, ru)
+	// language: (en, de, es, fr, nl, ru, zh-Hant)
 	$GLOBALS["language"] = "en";
 
 	// the filename of the QuiXplorer script: (you rarely need to change this)
@@ -66,6 +66,9 @@
 	// filenames not allowed to access: (uses PCRE regex syntax)
 	$GLOBALS["no_access"] = "^\.ht";
 
+    // todo: hidden files by name
+	// filenames not show in file list
+	$GLOBALS["not_show"] = "/(^Thumbs\.db$)|(^\.DS_Store$)|(^conf\.php$)|(^\.htusers\.php$)/";
 //------------------------------------------------------------------------------
 
 	// Adding values for each language to this array changes
