@@ -68,7 +68,7 @@ function get_file_perms($dir,$item) {		// file permissions
 }
 //------------------------------------------------------------------------------
 function parse_file_perms($mode) {		// parsed file permisions
-	if(strlen($mode)<3) return "---------";
+	if(mb_strlen($mode)<3) return "---------";
 	$parsed_mode="";
 	for($i=0;$i<3;$i++) {
 		// read
@@ -297,13 +297,13 @@ function remove ( $item )
 function get_max_file_size() {			// get php max_upload_file_size
 	$max = get_cfg_var("upload_max_filesize");
 	if(@preg_match("/G$/i",$max)) {
-		$max = substr($max,0,-1);
+		$max = mb_substr($max,0,-1);
 		$max = round($max*1073741824);
 	} elseif(@preg_match("/M$/i",$max)) {
-		$max = substr($max,0,-1);
+		$max = mb_substr($max,0,-1);
 		$max = round($max*1048576);
 	} elseif(@preg_match("/K$/i",$max)) {
-		$max = substr($max,0,-1);
+		$max = mb_substr($max,0,-1);
 		$max = round($max*1024);
 	}
 
@@ -316,7 +316,7 @@ function down_home($abs_dir) {			// dir deeper than home?
 
 	if($real_home===false || $real_dir===false) {
 		if(@preg_match("/\\.\\./i",$abs_dir)) return false;
-	} else if(strcmp($real_home,@substr($real_dir,0,strlen($real_home)))) {
+	} else if(strcmp($real_home,@mb_substr($real_dir,0,mb_strlen($real_home)))) {
 		return false;
 	}
 	return true;

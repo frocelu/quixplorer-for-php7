@@ -31,7 +31,7 @@ class extFile
 	 */
 	function getExt($file) {
 		$dot = strrpos($file, '.') + 1;
-		return substr($file, $dot);
+		return mb_substr($file, $dot);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class extFile
 			// 1: Not the end of the file AND
 			// 2a: No Max Amount set OR
 			// 2b: The length of the data is less than the max amount we want
-			while (!feof($fh) && (!$amount || strlen($data) < $amount)) {
+			while (!feof($fh) && (!$amount || mb_strlen($data) < $amount)) {
 				$data .= fread($fh, $chunksize);
 			}
 		}
@@ -125,7 +125,7 @@ class extFile
 	function getName($file) {
 		$slash = strrpos($file, DS);
 		if ($slash !== false) {
-			return substr($file, $slash + 1);
+			return mb_substr($file, $slash + 1);
 		} else {
 			return $file;
 		}

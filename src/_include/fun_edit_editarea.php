@@ -75,7 +75,7 @@ function edit_file($dir, $item)
 	if($fp===false) show_error(htmlspecialchars($item).": ".$GLOBALS["error_msg"]["openfile"]);
 
 	// header
-	$s_item=get_rel_item($dir,$item);	if(strlen($s_item)>50) $s_item="...".substr($s_item,-47);
+	$s_item=get_rel_item($dir,$item);	if(mb_strlen($s_item)>50) $s_item="...".mb_substr($s_item,-47);
 	show_header($GLOBALS["messages"]["actedit"].": /".htmlspecialchars($s_item));
 
 	// Wordwrap (works only in IE)

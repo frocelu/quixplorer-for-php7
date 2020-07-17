@@ -35,7 +35,7 @@ define('PEAR_ERROR_EXCEPTION', 32);
 define('PEAR_ZE2', (function_exists('version_compare') &&
                     version_compare(zend_version(), "2-dev", "ge")));
 
-if (substr(PHP_OS, 0, 3) == 'WIN') {
+if (mb_substr(PHP_OS, 0, 3) == 'WIN') {
     define('OS_WINDOWS', true);
     define('OS_UNIX',    false);
     define('PEAR_OS',    'Windows');
@@ -766,7 +766,7 @@ class PEAR_Error
             $msg = $this->getMessage();
             if (is_null($options) || is_int($options)) {
                 $format = "%s";
-                if (substr($msg, -1) != "\n") {
+                if (mb_substr($msg, -1) != "\n") {
                     $msg .= "\n";
                 }
             } else {

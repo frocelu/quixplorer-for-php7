@@ -71,7 +71,7 @@
 #   # read and add each file to the archive
 #   foreach ($files as $path)
 #     $zip->add_file($path, file_get_contents($path));
-# 
+#
 #   # write archive footer to stream
 #   $zip->finish();
 #
@@ -81,7 +81,7 @@ class ZipStream {
   var $opt = array(),
       $files = array(),
       $cdr_ofs = 0,
-      $ofs = 0; 
+      $ofs = 0;
 
   #
   # Create a new ZipStream object.
@@ -96,7 +96,7 @@ class ZipStream {
   #
   #   comment             - Comment for this archive.
   #   content_type        - HTTP Content-Type.  Defaults to 'application/x-zip'.
-  #   content_disposition - HTTP Content-Disposition.  Defaults to 
+  #   content_disposition - HTTP Content-Disposition.  Defaults to
   #                         'attachment; filename=\"FILENAME\"', where
   #                         FILENAME is the specified filename.
   #   large_file_size     - Size, in bytes, of the largest file to try
@@ -163,20 +163,20 @@ class ZipStream {
 
     $this->output_name = $name;
     if ($name || $opt['send_http_headers'])
-      $this->need_headers = true; 
+      $this->need_headers = true;
   }
 
   #
   # add_file - add a file to the archive
   #
   # Parameters:
-  #   
+  #
   #  $name - path of file in archive (including directory).
   #  $data - contents of file
   #  $opt  - Hash of options for file (optional, see "File Options"
-  #          below).  
+  #          below).
   #
-  # File Options: 
+  # File Options:
   #  time     - Last-modified timestamp (seconds since the epoch) of
   #             this file.  Defaults to the current time.
   #  comment  - Comment related to this file.
@@ -186,7 +186,7 @@ class ZipStream {
   #   # add a file named 'foo.txt'
   #   $data = file_get_contents('foo.txt');
   #   $zip->add_file('foo.txt', $data);
-  # 
+  #
   #   # add a file named 'bar.jpg' with a comment and a last-modified
   #   # time of two hours ago
   #   $data = file_get_contents('bar.jpg');
@@ -194,15 +194,15 @@ class ZipStream {
   #     'time'    => time() - 2 * 3600,
   #     'comment' => 'this is a comment about bar.jpg',
   #   ));
-  # 
+  #
   function add_file($name, $data, $opt = array()) {
     # compress data
     $zdata = gzdeflate($data);
 
     # calculate header attributes
     $crc  = crc32($data);
-    $zlen = strlen($zdata);
-    $len  = strlen($data);
+    $zlen = mb_strlen($zdata);
+    $len  = mb_strlen($data);
     $meth = 0x08;
 
     # send file header
@@ -220,14 +220,14 @@ class ZipStream {
   # information.
   #
   # Parameters:
-  #   
+  #
   #  $name - name of file in archive (including directory path).
   #  $path - path to file on disk (note: paths should be encoded using
   #          UNIX-style forward slashes -- e.g '/path/to/some/file').
   #  $opt  - Hash of options for file (optional, see "File Options"
-  #          below).  
+  #          below).
   #
-  # File Options: 
+  # File Options:
   #  time     - Last-modified timestamp (seconds since the epoch) of
   #             this file.  Defaults to the current time.
   #  comment  - Comment related to this file.
@@ -236,7 +236,7 @@ class ZipStream {
   #
   #   # add a file named 'foo.txt' from the local file '/tmp/foo.txt'
   #   $zip->add_file_from_path('foo.txt', '/tmp/foo.txt');
-  # 
+  #
   #   # add a file named 'bigfile.rar' from the local file
   #   # '/usr/share/bigfile.rar' with a comment and a last-modified
   #   # time of two hours ago
@@ -245,7 +245,7 @@ class ZipStream {
   #     'time'    => time() - 2 * 3600,
   #     'comment' => 'this is a comment about bar.jpg',
   #   ));
-  # 
+  #
   function add_file_from_path($name, $path, $opt = array()) {
     if ($this->is_large_file($path)) {
       # file is too large to be read into memory; add progressively
@@ -267,10 +267,10 @@ class ZipStream {
   #   $files = array('foo.txt', 'bar.jpg');
   #   foreach ($files as $path)
   #     $zip->add_file($path, file_get_contents($path));
-  # 
+  #
   #   # write footer to stream
   #   $zip->finish();
-  # 
+  #
   function finish() {
     # add trailing cdr record
     $this->add_cdr($this->opt);
@@ -290,7 +290,7 @@ class ZipStream {
     $name = preg_replace('/^\\/+/', '', $name);
 
     # calculate name length
-    $nlen = strlen($name);
+    $nlen = mb_strlen($name);
 
     # create dos timestamp
     $opt['time'] = $opt['time'] ? $opt['time'] : time();
@@ -312,7 +312,7 @@ class ZipStream {
 
     # pack fields and calculate "total" length
     $ret = $this->pack_fields($fields);
-    $cdr_len = strlen($ret) + $nlen + $zlen;
+    $cdr_len = mb_strlen($ret) + $nlen + $zlen;
 
     # print header and filename
     $this->send($ret . $name);
@@ -351,7 +351,7 @@ class ZipStream {
       while ($data = fgets($fh, $block_size)) {
         hash_update($hash_ctx, $data);
         $data = gzdeflate($data);
-        $zlen += strlen($data);
+        $zlen += mb_strlen($data);
       }
 
       # close file and finalize crc
@@ -370,7 +370,7 @@ class ZipStream {
 
     # send file blocks
     while ($data = fgets($fh, $block_size)) {
-      if ($meth_str == 'deflate') 
+      if ($meth_str == 'deflate')
         $data = gzdeflate($data);
 
       # send data
@@ -386,7 +386,7 @@ class ZipStream {
   #
   function is_large_file($path) {
     $st = stat($path);
-    return ($this->opt['large_file_size'] > 0) && 
+    return ($this->opt['large_file_size'] > 0) &&
            ($st['size'] > $this->opt['large_file_size']);
   }
 
@@ -420,9 +420,9 @@ class ZipStream {
       array('V', $crc),                 # crc32 of data
       array('V', $zlen),                # compressed data length
       array('V', $len),                 # uncompressed data length
-      array('v', strlen($name)),        # filename length
+      array('v', mb_strlen($name)),        # filename length
       array('v', 0),                    # extra data len
-      array('v', strlen($comment)),     # file comment length
+      array('v', mb_strlen($comment)),     # file comment length
       array('v', 0),                    # disk number start
       array('v', 0),                    # internal file attributes
       array('V', 32),                   # external file attributes
@@ -435,7 +435,7 @@ class ZipStream {
     $this->send($ret);
 
     # increment cdr offset
-    $this->cdr_ofs += strlen($ret);
+    $this->cdr_ofs += mb_strlen($ret);
   }
 
   #
@@ -459,7 +459,7 @@ class ZipStream {
       array('v', $num),               # number of entries in the cdr
       array('V', $cdr_len),           # cdr size
       array('V', $cdr_ofs),           # cdr ofs
-      array('v', strlen($comment)),   # zip file comment length
+      array('v', mb_strlen($comment)),   # zip file comment length
     );
 
     $ret = $this->pack_fields($fields) . $comment;
@@ -496,18 +496,18 @@ class ZipStream {
   private function send_http_headers() {
     # grab options
     $opt = $this->opt;
-    
+
     # grab content type from options
     $content_type = 'application/x-zip';
     if ($opt['content_type'])
       $content_type = $this->opt['content_type'];
 
-    # grab content disposition 
+    # grab content disposition
     $disposition = 'attachment';
     if ($opt['content_disposition'])
       $disposition = $opt['content_disposition'];
 
-    if ($this->output_name) 
+    if ($this->output_name)
       $disposition .= "; filename=\"{$this->output_name}\"";
 
     $headers = array(
@@ -542,7 +542,7 @@ class ZipStream {
 
     # set lower-bound on dates
     if ($d['year'] < 1980) {
-      $d = array('year' => 1980, 'mon' => 1, 'mday' => 1, 
+      $d = array('year' => 1980, 'mon' => 1, 'mday' => 1,
                  'hours' => 0, 'minutes' => 0, 'seconds' => 0);
     }
 

@@ -34,7 +34,7 @@ Author: The QuiX project
 Comment:
 	QuiXplorer Version 2.3
 	Permission-Change Functions
-	
+
 	Have Fun...
 ------------------------------------------------------------------------------*/
 require_once("./_include/permissions.php");
@@ -46,7 +46,7 @@ function chmod_item($dir, $item)
 			show_error($GLOBALS["error_msg"]["accessfunc"]);
 	if(!file_exists(get_abs_item($dir, $item))) show_error($item.": ".$GLOBALS["error_msg"]["fileexist"]);
 	if(!get_show_item($dir, $item)) show_error($item.": ".$GLOBALS["error_msg"]["accessfile"]);
-	
+
 	// Execute
 	if(isset($GLOBALS['__POST']["confirm"]) && $GLOBALS['__POST']["confirm"]=="true") {
 		$bin='';
@@ -55,28 +55,28 @@ function chmod_item($dir, $item)
 			if(isset($GLOBALS['__POST'][$tmp]) &&$GLOBALS['__POST'][$tmp]=="1" ) $bin.='1';
 			else $bin.='0';
 		}
-		
+
 		if(!@chmod(get_abs_item($dir,$item),bindec($bin))) {
 			show_error($item.": ".$GLOBALS["error_msg"]["permchange"]);
 		}
 		header("Location: ".make_link("link",$dir,NULL));
 		return;
 	}
-	
+
 	$mode = parse_file_perms(get_file_perms($dir,$item));
 	if($mode===false) show_error($item.": ".$GLOBALS["error_msg"]["permread"]);
 	$pos = "rwx";
-	
-	$s_item=get_rel_item($dir,$item);	if(strlen($s_item)>50) $s_item="...".substr($s_item,-47);
+
+	$s_item=get_rel_item($dir,$item);	if(mb_strlen($s_item)>50) $s_item="...".mb_substr($s_item,-47);
 	show_header($GLOBALS["messages"]["actperms"].": /".$s_item);
-	
+
 
 	// Form
 	echo "<BR><TABLE width=\"175\"><FORM method=\"post\" action=\"";
 	echo make_link("chmod",$dir,$item) . "\">\n";
 	echo "<INPUT type=\"hidden\" name=\"confirm\" value=\"true\">\n";
-	
-	// print table with current perms & checkboxes to change	
+
+	// print table with current perms & checkboxes to change
 	for($i=0;$i<3;++$i) {
 		echo "<TR><TD>" . $GLOBALS["messages"]["miscchmod"][$i] . "</TD>";
 		for($j=0;$j<3;++$j) {
@@ -86,7 +86,7 @@ function chmod_item($dir, $item)
 		}
 		echo "</TR>\n";
 	}
-	
+
 	// Submit / Cancel
 	echo "</TABLE>\n<BR><TABLE>\n<TR><TD>\n<INPUT type=\"submit\" value=\"".$GLOBALS["messages"]["btnchange"];
 	echo "\"></TD>\n<TD><input type=\"button\" value=\"".$GLOBALS["messages"]["btncancel"];

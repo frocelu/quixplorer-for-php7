@@ -76,8 +76,8 @@ function admin($admin, $dir)
 		for($i = 0; $i < $cnt; ++$i)
 		{
 			// Username & Home dir:
-			$user=$GLOBALS["users"][$i][0];	if(strlen($user)>15) $user=substr($user,0,12)."...";
-			$home=$GLOBALS["users"][$i][2];	if(strlen($home)>30) $home=substr($home,0,27)."...";
+			$user=$GLOBALS["users"][$i][0];	if(mb_strlen($user)>15) $user=mb_substr($user,0,12)."...";
+			$home=$GLOBALS["users"][$i][2];	if(mb_strlen($home)>30) $home=mb_substr($home,0,27)."...";
 
 			echo "<TR><TD width=\"1%\"><INPUT TYPE=\"radio\" name=\"user\" value=\"";
 			echo $GLOBALS["users"][$i][0]."\"".(($i==0)?" checked":"")."></TD>\n";

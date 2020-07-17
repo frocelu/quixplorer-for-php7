@@ -161,7 +161,7 @@ function print_table ($dir, $list)
 		//else echo "<A>";
 		echo "<IMG border=\"0\" width=\"16\" height=\"16\" ";
 		echo "align=\"ABSMIDDLE\" src=\"_img/".get_mime_type($dir, $item, "img")."\" ALT=\"\">&nbsp;";
-		$s_item=$item;	if(mb_strlen($s_item)>50) $s_item=mb_substr($s_item,0,47)."...";
+		$s_item=$item;	if(mb_mb_strlen($s_item)>50) $s_item=mb_mb_substr($s_item,0,47)."...";
 		echo htmlspecialchars($s_item);
 		if (permissions_grant($dir, $item, "read"))
 			echo "</A>";
@@ -228,8 +228,8 @@ function list_dir ( $dir )
 	make_tables($dir, $dir_list, $file_list, $tot_file_size, $num_items);
 
 	$s_dir = $dir;
-    if (strlen($s_dir) >50 )
-        $s_dir = "..." . substr($s_dir,-47);
+    if (mb_strlen($s_dir) >50 )
+        $s_dir = "..." . mb_substr($s_dir,-47);
 	show_header($GLOBALS["messages"]["actdir"].": "._breadcrumbs($dir));
 	// show_header($GLOBALS["messages"]["actdir"].": /".get_rel_item("",$s_dir));
 

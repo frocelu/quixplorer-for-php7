@@ -72,7 +72,7 @@ function dir_print($dir_list, $new_dir) {    // print list of directories
     // Print List Of Target Directories
     if(!is_array($dir_list)) return;
     while(list($new_item,) = each($dir_list)) {
-        $s_item=$new_item;    if(strlen($s_item)>40) $s_item=substr($s_item,0,37)."...";
+        $s_item=$new_item;    if(mb_strlen($s_item)>40) $s_item=mb_substr($s_item,0,37)."...";
         echo "<TR><TD><A HREF=\"javascript:NewDir('".addslashes(get_rel_item($new_dir,$new_item)).
             "');\"><IMG border=\"0\" width=\"16\" height=\"16\" align=\"ABSMIDDLE\" ".
             "src=\"_img/dir.gif\" ALT=\"\">&nbsp;".htmlspecialchars($s_item)."</A></TD></TR>\n";
@@ -131,8 +131,8 @@ function copy_move_items ($dir)
 <?php
 
         // "Copy / Move from .. to .."
-        $s_dir=$dir;        if(strlen($s_dir)>40) $s_dir="...".substr($s_dir,-37);
-        $s_ndir=$new_dir;    if(strlen($s_ndir)>40) $s_ndir="...".substr($s_ndir,-37);
+        $s_dir=$dir;        if(mb_strlen($s_dir)>40) $s_dir="...".mb_substr($s_dir,-37);
+        $s_ndir=$new_dir;    if(mb_strlen($s_ndir)>40) $s_ndir="...".mb_substr($s_ndir,-37);
         echo "<BR><IMG SRC=\"".$_img."\" align=\"ABSMIDDLE\" ALT=\"\">&nbsp;";
         echo htmlspecialchars(sprintf(($GLOBALS["action"]!="move"?$GLOBALS["messages"]["actcopyfrom"]:
             $GLOBALS["messages"]["actmovefrom"]),$s_dir, $s_ndir));
@@ -157,7 +157,7 @@ function copy_move_items ($dir)
                 $newitem=$GLOBALS['__POST']["newitems"][$i];
                 if($first=="y") $newitem=$selitem;
             } else $newitem=$selitem;
-            $s_item=$selitem;    if(strlen($s_item)>50) $s_item=substr($s_item,0,47)."...";
+            $s_item=$selitem;    if(mb_strlen($s_item)>50) $s_item=mb_substr($s_item,0,47)."...";
             echo "<TR><TD><IMG SRC=\"_img/_info.gif\" align=\"ABSMIDDLE\" ALT=\"\">";
             // Old Name
             echo "<INPUT type=\"hidden\" name=\"selitems[]\" value=\"";

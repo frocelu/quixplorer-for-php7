@@ -76,8 +76,8 @@ function print_table($list)
 	$cnt = count($list);
 	for($i=0;$i<$cnt;++$i) {
 		$dir = $list[$i][0];	$item = $list[$i][1];
-		$s_dir=$dir;	if(strlen($s_dir)>65) $s_dir=substr($s_dir,0,62)."...";
-		$s_item=$item;	if(strlen($s_item)>45) $s_item=substr($s_item,0,42)."...";
+		$s_dir=$dir;	if(mb_strlen($s_dir)>65) $s_dir=mb_substr($s_dir,0,62)."...";
+		$s_item=$item;	if(mb_strlen($s_item)>45) $s_item=mb_substr($s_item,0,42)."...";
 		$link = "";	$target = "";
 
 		if(get_is_dir($dir,$item)) {

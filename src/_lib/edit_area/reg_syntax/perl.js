@@ -30,7 +30,7 @@ editAreaLoader.load_syntax["perl"] = {
 		'functions' :
 			[
 				//from :base_core
-				"int", "hex", "oct", "abs", "substr", "vec", "study", "pos",
+				"int", "hex", "oct", "abs", "mb_substr", "vec", "study", "pos",
 				"length", "index", "rindex", "ord", "chr", "ucfirst", "lcfirst",
 				"uc", "lc", "quotemeta", "chop", "chomp", "split", "list", "splice",
 				"push", "pop", "shift", "unshift", "reverse", "and", "or", "dor",

@@ -125,11 +125,11 @@ class Archive_Tar extends PEAR
             } else {
                 // probably a remote file or some file accessible
                 // through a stream interface
-                if (substr($p_tarname, -2) == 'gz') {
+                if (mb_substr($p_tarname, -2) == 'gz') {
                     $this->_compress = true;
                     $this->_compress_type = 'gz';
-                } elseif ((substr($p_tarname, -3) == 'bz2') ||
-                          (substr($p_tarname, -2) == 'bz')) {
+                } elseif ((mb_substr($p_tarname, -3) == 'bz2') ||
+                          (mb_substr($p_tarname, -2) == 'bz')) {
                     $this->_compress = true;
                     $this->_compress_type = 'bz2';
                 }
@@ -643,7 +643,7 @@ class Archive_Tar extends PEAR
     // {{{ _openRead()
     function _openRead()
     {
-        if (strtolower(substr($this->_tarname, 0, 7)) == 'http://') {
+        if (strtolower(mb_substr($this->_tarname, 0, 7)) == 'http://') {
 
           // ----- Look if a local copy need to be done
           if ($this->_temp_tarname == '') {
@@ -940,15 +940,15 @@ class Archive_Tar extends PEAR
           return true;
       }
       if ($p_remove_dir != '') {
-          if (substr($p_remove_dir, -1) != '/')
+          if (mb_substr($p_remove_dir, -1) != '/')
               $p_remove_dir .= '/';
 
-          if (substr($p_filename, 0, strlen($p_remove_dir)) == $p_remove_dir)
-              $v_stored_filename = substr($p_filename, strlen($p_remove_dir));
+          if (mb_substr($p_filename, 0, mb_strlen($p_remove_dir)) == $p_remove_dir)
+              $v_stored_filename = mb_substr($p_filename, mb_strlen($p_remove_dir));
       }
       $v_stored_filename = $this->_translateWinPath($v_stored_filename);
       if ($p_add_dir != '') {
-          if (substr($p_add_dir, -1) == '/')
+          if (mb_substr($p_add_dir, -1) == '/')
               $v_stored_filename = $p_add_dir.$v_stored_filename;
           else
               $v_stored_filename = $p_add_dir.'/'.$v_stored_filename;
@@ -999,12 +999,12 @@ class Archive_Tar extends PEAR
       // ----- Calculate the stored filename
       $p_filename = $this->_translateWinPath($p_filename, false);;
 
-      if (!$this->_writeHeaderBlock($p_filename, strlen($p_string),
+      if (!$this->_writeHeaderBlock($p_filename, mb_strlen($p_string),
 	                                  time(), 384, "", 0, 0))
           return false;
 
       $i=0;
-      while (($v_buffer = substr($p_string, (($i++)*512), 512)) != '') {
+      while (($v_buffer = mb_substr($p_string, (($i++)*512), 512)) != '') {
           $v_binary_data = pack("a512", $v_buffer);
           $this->_writeBlock($v_binary_data);
       }
@@ -1020,7 +1020,7 @@ class Archive_Tar extends PEAR
             $p_stored_filename = $p_filename;
         $v_reduce_filename = $this->_pathReduction($p_stored_filename);
 
-        if (strlen($v_reduce_filename) > 99) {
+        if (mb_strlen($v_reduce_filename) > 99) {
           if (!$this->_writeLongHeader($v_reduce_filename))
             return false;
         }
@@ -1073,13 +1073,13 @@ class Archive_Tar extends PEAR
         $v_checksum = 0;
         // ..... First part of the header
         for ($i=0; $i<148; $i++)
-            $v_checksum += ord(substr($v_binary_data_first,$i,1));
+            $v_checksum += ord(mb_substr($v_binary_data_first,$i,1));
         // ..... Ignore the checksum value and replace it by ' ' (space)
         for ($i=148; $i<156; $i++)
             $v_checksum += ord(' ');
         // ..... Last part of the header
         for ($i=156, $j=0; $i<512; $i++, $j++)
-            $v_checksum += ord(substr($v_binary_data_last,$j,1));
+            $v_checksum += ord(mb_substr($v_binary_data_last,$j,1));
 
         // ----- Write the first 148 bytes of the header in the archive
         $this->_writeBlock($v_binary_data_first, 148);
@@ -1102,7 +1102,7 @@ class Archive_Tar extends PEAR
     {
         $p_filename = $this->_pathReduction($p_filename);
 
-        if (strlen($p_filename) > 99) {
+        if (mb_strlen($p_filename) > 99) {
           if (!$this->_writeLongHeader($p_filename))
             return false;
         }
@@ -1147,13 +1147,13 @@ class Archive_Tar extends PEAR
         $v_checksum = 0;
         // ..... First part of the header
         for ($i=0; $i<148; $i++)
-            $v_checksum += ord(substr($v_binary_data_first,$i,1));
+            $v_checksum += ord(mb_substr($v_binary_data_first,$i,1));
         // ..... Ignore the checksum value and replace it by ' ' (space)
         for ($i=148; $i<156; $i++)
             $v_checksum += ord(' ');
         // ..... Last part of the header
         for ($i=156, $j=0; $i<512; $i++, $j++)
-            $v_checksum += ord(substr($v_binary_data_last,$j,1));
+            $v_checksum += ord(mb_substr($v_binary_data_last,$j,1));
 
         // ----- Write the first 148 bytes of the header in the archive
         $this->_writeBlock($v_binary_data_first, 148);
@@ -1173,7 +1173,7 @@ class Archive_Tar extends PEAR
     // {{{ _writeLongHeader()
     function _writeLongHeader($p_filename)
     {
-        $v_size = sprintf("%11s ", DecOct(strlen($p_filename)));
+        $v_size = sprintf("%11s ", DecOct(mb_strlen($p_filename)));
 
         $v_typeflag = 'L';
 
@@ -1204,13 +1204,13 @@ class Archive_Tar extends PEAR
         $v_checksum = 0;
         // ..... First part of the header
         for ($i=0; $i<148; $i++)
-            $v_checksum += ord(substr($v_binary_data_first,$i,1));
+            $v_checksum += ord(mb_substr($v_binary_data_first,$i,1));
         // ..... Ignore the checksum value and replace it by ' ' (space)
         for ($i=148; $i<156; $i++)
             $v_checksum += ord(' ');
         // ..... Last part of the header
         for ($i=156, $j=0; $i<512; $i++, $j++)
-            $v_checksum += ord(substr($v_binary_data_last,$j,1));
+            $v_checksum += ord(mb_substr($v_binary_data_last,$j,1));
 
         // ----- Write the first 148 bytes of the header in the archive
         $this->_writeBlock($v_binary_data_first, 148);
@@ -1225,7 +1225,7 @@ class Archive_Tar extends PEAR
 
         // ----- Write the filename as content of the block
         $i=0;
-        while (($v_buffer = substr($p_filename, (($i++)*512), 512)) != '') {
+        while (($v_buffer = mb_substr($p_filename, (($i++)*512), 512)) != '') {
             $v_binary_data = pack("a512", "$v_buffer");
             $this->_writeBlock($v_binary_data);
         }
@@ -1237,14 +1237,14 @@ class Archive_Tar extends PEAR
     // {{{ _readHeader()
     function _readHeader($v_binary_data, &$v_header)
     {
-        if (strlen($v_binary_data)==0) {
+        if (mb_strlen($v_binary_data)==0) {
             $v_header['filename'] = '';
             return true;
         }
 
-        if (strlen($v_binary_data) != 512) {
+        if (mb_strlen($v_binary_data) != 512) {
             $v_header['filename'] = '';
-            $this->_error('Invalid block size : '.strlen($v_binary_data));
+            $this->_error('Invalid block size : '.mb_strlen($v_binary_data));
             return false;
         }
 
@@ -1255,13 +1255,13 @@ class Archive_Tar extends PEAR
         $v_checksum = 0;
         // ..... First part of the header
         for ($i=0; $i<148; $i++)
-            $v_checksum+=ord(substr($v_binary_data,$i,1));
+            $v_checksum+=ord(mb_substr($v_binary_data,$i,1));
         // ..... Ignore the checksum value and replace it by ' ' (space)
         for ($i=148; $i<156; $i++)
             $v_checksum += ord(' ');
         // ..... Last part of the header
         for ($i=156; $i<512; $i++)
-           $v_checksum+=ord(substr($v_binary_data,$i,1));
+           $v_checksum+=ord(mb_substr($v_binary_data,$i,1));
 
         $v_data = unpack("a100filename/a8mode/a8uid/a8gid/a12size/a12mtime/"
 		                 ."a8checksum/a1typeflag/a100link/a6magic/a2version/"
@@ -1377,7 +1377,7 @@ class Archive_Tar extends PEAR
     {
         $v_result_str = "";
 
-        While (strlen($v_binary_data = $this->_readBlock()) != 0)
+        While (mb_strlen($v_binary_data = $this->_readBlock()) != 0)
         {
           if (!$this->_readHeader($v_binary_data, $v_header))
             return NULL;
@@ -1403,7 +1403,7 @@ class Archive_Tar extends PEAR
                   }
                   if (($v_header['size'] % 512) != 0) {
                       $v_content = $this->_readBlock();
-                      $v_result_str .= substr($v_content, 0,
+                      $v_result_str .= mb_substr($v_content, 0,
 					                          ($v_header['size'] % 512));
                   }
                   return $v_result_str;
@@ -1427,16 +1427,16 @@ class Archive_Tar extends PEAR
     $v_listing = false;
 
     $p_path = $this->_translateWinPath($p_path, false);
-    if ($p_path == '' || (substr($p_path, 0, 1) != '/'
-	    && substr($p_path, 0, 3) != "../" && !strpos($p_path, ':'))) {
+    if ($p_path == '' || (mb_substr($p_path, 0, 1) != '/'
+	    && mb_substr($p_path, 0, 3) != "../" && !strpos($p_path, ':'))) {
       $p_path = "./".$p_path;
     }
     $p_remove_path = $this->_translateWinPath($p_remove_path);
 
     // ----- Look for path to remove format (should end by /)
-    if (($p_remove_path != '') && (substr($p_remove_path, -1) != '/'))
+    if (($p_remove_path != '') && (mb_substr($p_remove_path, -1) != '/'))
       $p_remove_path .= '/';
-    $p_remove_path_size = strlen($p_remove_path);
+    $p_remove_path_size = mb_strlen($p_remove_path);
 
     switch ($p_mode) {
       case "complete" :
@@ -1458,7 +1458,7 @@ class Archive_Tar extends PEAR
 
     clearstatcache();
 
-    while (strlen($v_binary_data = $this->_readBlock()) != 0)
+    while (mb_strlen($v_binary_data = $this->_readBlock()) != 0)
     {
       $v_extract_file = FALSE;
       $v_extraction_stopped = 0;
@@ -1482,10 +1482,10 @@ class Archive_Tar extends PEAR
 
         for ($i=0; $i<sizeof($p_file_list); $i++) {
           // ----- Look if it is a directory
-          if (substr($p_file_list[$i], -1) == '/') {
+          if (mb_substr($p_file_list[$i], -1) == '/') {
             // ----- Look if the directory is in the filename path
-            if ((strlen($v_header['filename']) > strlen($p_file_list[$i]))
-			    && (substr($v_header['filename'], 0, strlen($p_file_list[$i]))
+            if ((mb_strlen($v_header['filename']) > mb_strlen($p_file_list[$i]))
+			    && (mb_substr($v_header['filename'], 0, mb_strlen($p_file_list[$i]))
 				    == $p_file_list[$i])) {
               $v_extract_file = TRUE;
               break;
@@ -1506,15 +1506,15 @@ class Archive_Tar extends PEAR
       if (($v_extract_file) && (!$v_listing))
       {
         if (($p_remove_path != '')
-            && (substr($v_header['filename'], 0, $p_remove_path_size)
+            && (mb_substr($v_header['filename'], 0, $p_remove_path_size)
 			    == $p_remove_path))
-          $v_header['filename'] = substr($v_header['filename'],
+          $v_header['filename'] = mb_substr($v_header['filename'],
 		                                 $p_remove_path_size);
         if (($p_path != './') && ($p_path != '/')) {
-          while (substr($p_path, -1) == '/')
-            $p_path = substr($p_path, 0, strlen($p_path)-1);
+          while (mb_substr($p_path, -1) == '/')
+            $p_path = mb_substr($p_path, 0, mb_strlen($p_path)-1);
 
-          if (substr($v_header['filename'], 0, 1) == '/')
+          if (mb_substr($v_header['filename'], 0, 1) == '/')
               $v_header['filename'] = $p_path.$v_header['filename'];
           else
             $v_header['filename'] = $p_path.'/'.$v_header['filename'];
@@ -1626,7 +1626,7 @@ class Archive_Tar extends PEAR
         if (($v_file_dir = dirname($v_header['filename']))
 		    == $v_header['filename'])
           $v_file_dir = '';
-        if ((substr($v_header['filename'], 0, 1) == '/') && ($v_file_dir == ''))
+        if ((mb_substr($v_header['filename'], 0, 1) == '/') && ($v_file_dir == ''))
           $v_file_dir = '/';
 
         $p_list_detail[$v_nb++] = $v_header;
@@ -1688,7 +1688,7 @@ class Archive_Tar extends PEAR
                 @gzclose($v_temp_tar);
             }
             elseif ($this->_compress_type == 'bz2') {
-                while (strlen($v_buffer = @bzread($v_temp_tar, 512)) > 0) {
+                while (mb_strlen($v_buffer = @bzread($v_temp_tar, 512)) > 0) {
                     if ($v_buffer == ARCHIVE_TAR_END_BLOCK) {
                         continue;
                     }
@@ -1834,10 +1834,10 @@ class Archive_Tar extends PEAR
           // ----- Look for potential disk letter
           if (   ($p_remove_disk_letter)
 		      && (($v_position = strpos($p_path, ':')) != false)) {
-              $p_path = substr($p_path, $v_position+1);
+              $p_path = mb_substr($p_path, $v_position+1);
           }
           // ----- Change potential windows directory separator
-          if ((strpos($p_path, '\\') > 0) || (substr($p_path, 0,1) == '\\')) {
+          if ((strpos($p_path, '\\') > 0) || (mb_substr($p_path, 0,1) == '\\')) {
               $p_path = strtr($p_path, '\\', '/');
           }
       }

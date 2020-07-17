@@ -14,9 +14,9 @@
  */
 
 /** boolean True if a Windows based host */
-define('EXTPATH_ISWIN', (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN'));
+define('EXTPATH_ISWIN', (strtoupper(mb_substr(PHP_OS, 0, 3)) === 'WIN'));
 /** boolean True if a Mac based host */
-define('EXTPATH_ISMAC', (strtoupper(substr(PHP_OS, 0, 3)) === 'MAC'));
+define('EXTPATH_ISMAC', (strtoupper(mb_substr(PHP_OS, 0, 3)) === 'MAC'));
 
 if (!defined('DS')) {
 	/** string Shortcut for the DIRECTORY_SEPARATOR define */
@@ -116,7 +116,7 @@ class extPath
 		$path = extpath::clean($path);
 		$mode = @ decoct(@ fileperms($path) & 0777);
 
-		if (strlen($mode) < 3) {
+		if (mb_strlen($mode) < 3) {
 			return '---------';
 		}
 		$parsed_mode = '';
@@ -188,7 +188,7 @@ class extPath
 	function find($paths, $file)
 	{
 		settype($paths, 'array'); //force to array
-		
+
 		// start looping through the path set
 		foreach ($paths as $path)
 		{
@@ -200,15 +200,15 @@ class extPath
 			{
 				// not a stream, so do a realpath() to avoid directory
 				// traversal attempts on the local file system.
-				$path = realpath($path); // needed for substr() later
+				$path = realpath($path); // needed for mb_substr() later
 				$fullname = realpath($fullname);
 			}
 
-			// the substr() check added to make sure that the realpath()
+			// the mb_substr() check added to make sure that the realpath()
 			// results in a directory registered so that
 			// non-registered directores are not accessible via directory
 			// traversal attempts.
-			if (file_exists($fullname) && substr($fullname, 0, strlen($path)) == $path) {
+			if (file_exists($fullname) && mb_substr($fullname, 0, mb_strlen($path)) == $path) {
 				return $fullname;
 			}
 		}
